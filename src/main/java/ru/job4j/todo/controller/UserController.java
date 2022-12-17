@@ -9,6 +9,7 @@ import ru.job4j.todo.model.User;
 import ru.job4j.todo.service.UserService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Optional;
 /**
  * Class UserController - Контроллер пользователей. Решение задач уровня Middle.
  * Категория : 3.3. HibernateТема : 3.3.2. Конфигурирование.
@@ -52,14 +53,14 @@ public class UserController {
 
     @PostMapping("/login")
     public String login(@ModelAttribute User user, HttpServletRequest req) {
-        User usr = userService.findUser(
+        Optional<User> usr = userService.findUserByEmailAndPassword(
                 user.getName(), user.getPassword()
         );
-        if (usr == null) {
+        if (usr.isEmpty()) {
             return "redirect:/loginPage?err=true";
         }
         HttpSession session = req.getSession();
-        session.setAttribute("user", usr);
+        session.setAttribute("user", usr.get());
         return "redirect:/items";
     }
 

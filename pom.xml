@@ -28,7 +28,6 @@
 						<configuration>
 							<configLocation>checkstyle.xml</configLocation>
 							<consoleOutput>true</consoleOutput>
-							<errsOnError>true</errsOnError>
 							<includeTestSourceDirectory>true</includeTestSourceDirectory>
 						</configuration>
 						<goals>

@@ -3,6 +3,8 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import ru.job4j.todo.model.User;
+
+import java.util.Optional;
 import java.util.function.Function;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -40,19 +42,13 @@ public class UserStore {
         }
     }
 
-    public User findUser(String name, String pwd) {
-        if (name != null) {
-            return (User) this.tx(
-                    session -> session.createQuery("from ru.job4j.todo.model.User where user_name = :fname and password = :fpwd")
-                            .setParameter("fname", name)
-                            .setParameter("fpwd", pwd)
-                            .setMaxResults(1).uniqueResult()
-            );
-        } else {
-            return (User) this.tx(
-                    session -> session.createQuery("from ru.job4j.todo.model.User").setMaxResults(1).uniqueResult()
-            );
-        }
+    public Optional<User> findUserByEmailAndPassword(String name, String password) {
+        return this.tx(
+                session -> session.createQuery("from ru.job4j.todo.model.User where user_name = :fname and password = :fpassword")
+                        .setParameter("fname", name)
+                        .setParameter("fpassword", password)
+                        .setMaxResults(1).uniqueResultOptional()
+        );
     }
 
     public User createUser(User user) {
