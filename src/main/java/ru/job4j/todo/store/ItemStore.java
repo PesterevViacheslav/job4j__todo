@@ -20,36 +20,15 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 @AllArgsConstructor
-public class ItemStore {
+public class ItemStore implements Store {
     private final SessionFactory sf;
-    /**
-     * Method tx. Применение шаблона проектирования wrapper.
-     * @param command
-     * @param <T>
-     * @return T
-    */
-    private <T> T tx(final Function<Session, T> command) {
-        final Session session = sf.openSession();
-        final Transaction tx = session.beginTransaction();
-        try {
-            T rsl = command.apply(session);
-            tx.commit();
-            return rsl;
-        } catch (final Exception e) {
-            session.getTransaction().rollback();
-            e.printStackTrace();
-            throw e;
-        } finally {
-            session.close();
-        }
-    }
     public Item add(Item item) {
         return this.tx(
                 session -> {
                     item.setCreated(new Timestamp(System.currentTimeMillis()));
                     session.save(item);
                     return item;
-                }
+                }, sf
         );
     }
      /**
@@ -60,7 +39,7 @@ public class ItemStore {
 
     public Item findById(int id) {
         return this.tx(
-                session -> session.get(Item.class, id)
+                session -> session.get(Item.class, id), sf
         );
     }
      /**
@@ -70,19 +49,19 @@ public class ItemStore {
 
     public void setDone(int id) {
         tx(session -> session.createQuery("update Item set done = true where id = :fId")
-                .setParameter("fId", id).executeUpdate()
+                .setParameter("fId", id).executeUpdate(), sf
         );
     }
     public void update(Item item) {
         tx(session -> {
                     session.update(item);
                     return null;
-                }
+                }, sf
         );
     }
     public void delete(int id) {
         tx(session -> session.createQuery("delete from Item where id = :fId")
-                .setParameter("fId", id).executeUpdate()
+                .setParameter("fId", id).executeUpdate(), sf
         );
     }
      /**
@@ -97,7 +76,7 @@ public class ItemStore {
                                     + "   and (:state = 1 or :state = 2 and done = true or :state = 3 and done = false)"
                                     + " order by 1")
                             .setParameter("user_id", user.getId()).setParameter("state", state).list();
-                }
+                }, sf
         );
     }
 }

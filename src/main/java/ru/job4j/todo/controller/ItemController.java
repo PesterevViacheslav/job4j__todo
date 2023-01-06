@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.*;
 import ru.job4j.todo.model.Item;
 import ru.job4j.todo.model.User;
 import ru.job4j.todo.service.ItemService;
+import ru.job4j.todo.util.UserUtil;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 /**
@@ -18,68 +20,70 @@ import javax.servlet.http.HttpSession;
 @Controller
 public class ItemController {
     private final ItemService itemService;
+
     public ItemController(ItemService itemService) {
         this.itemService = itemService;
     }
 
     @GetMapping("/items")
     public String items(Model model, HttpSession session) {
-        User user = (User) session.getAttribute("user");
-        if (user == null) {
-            user = new User();
-            user.setName("unknown");
-        }
-        model.addAttribute("user", user);
+        User user = UserUtil.getUser(model, session);
         model.addAttribute("items", itemService.findAllItems(1, user));
-        return "items";
+        return "item/items";
     }
 
     @GetMapping("/formNew")
     public String allNew(Model model, HttpSession session) {
-        User user = (User) session.getAttribute("user");
-        model.addAttribute("user", user);
+        User user = UserUtil.getUser(model, session);
         model.addAttribute("items", itemService.findAllItems(3, user));
-        return "items";
+        return "item/items";
     }
 
     @GetMapping("/formDone")
     public String allDone(Model model, HttpSession session) {
-        User user = (User) session.getAttribute("user");
-        model.addAttribute("user", user);
+        User user = UserUtil.getUser(model, session);
         model.addAttribute("items", itemService.findAllItems(2, user));
-        return "items";
+        return "item/items";
     }
 
     @GetMapping("/formDesc/{itemId}")
-    public String descItem(
-            Model model, HttpSession session, @PathVariable("itemId") int id) {
-        User user = (User) session.getAttribute("user");
-        model.addAttribute("user", user);
+    public String descItem(Model model, HttpSession session, @PathVariable("itemId") int id) {
+        User user = UserUtil.getUser(model, session);
         Item item = itemService.findById(id);
         model.addAttribute("item", item);
-        return "descItem";
+        if (user == null || item == null) {
+            return "redirect:/notFound";
+        } else {
+            return "item/descItem";
+        }
     }
 
     @GetMapping("/formUpdate/{itemId}")
     public String formUpdate(HttpServletRequest req, Model model, HttpSession session, @PathVariable("itemId") int id) {
-        User user = (User) session.getAttribute("user");
-        model.addAttribute("user", user);
+        User user = UserUtil.getUser(model, session);
         Item item = itemService.findById(id);
         model.addAttribute("item", item);
         req.setAttribute("item_id", item.getId());
-        return "updateItem";
+        if (user == null || item == null) {
+            return "redirect:/notFound";
+        } else {
+            return "item/updateItem";
+        }
     }
     @PostMapping("/updateItem")
     public String updateItem(HttpServletRequest req, @ModelAttribute Item item) {
-        itemService.update(item);
-        return "redirect:/items";
+        if (item == null) {
+            return "redirect:/notFound";
+        } else {
+            itemService.update(item);
+            return "redirect:/items";
+        }
     }
 
     @GetMapping("/formAdd")
     public String formAdd(@ModelAttribute Item item, Model model, HttpSession session) {
-        User user = (User) session.getAttribute("user");
-        model.addAttribute("user", user);
-        return "addItem";
+        UserUtil.getUser(model, session);
+        return "item/addItem";
     }
     @PostMapping("/createItem")
     public String createItem(@ModelAttribute Item item) {
@@ -89,13 +93,21 @@ public class ItemController {
 
     @GetMapping("/formDelete/{itemId}")
     public String deleteItem(@PathVariable("itemId") int id) {
-        itemService.delete(id);
-        return "redirect:/items";
+        if (id == 0) {
+            return "redirect:/shared/notFound";
+        } else {
+            itemService.delete(id);
+            return "redirect:/items";
+        }
     }
 
     @GetMapping("/formDone/{itemId}")
     public String doneItem(@PathVariable("itemId") int id) {
-        itemService.setDone(id);
-        return "redirect:/items";
+        if (id == 0) {
+            return "redirect:/shared/notFound";
+        } else {
+            itemService.setDone(id);
+            return "redirect:/items";
+        }
     }
 }

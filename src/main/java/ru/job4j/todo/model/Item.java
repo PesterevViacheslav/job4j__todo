@@ -30,7 +30,4 @@ public class Item {
     @JoinColumn(name = "user_id")
     @EqualsAndHashCode.Include
     private User user;
-    public boolean getDone() {
-        return done;
-    }
 }

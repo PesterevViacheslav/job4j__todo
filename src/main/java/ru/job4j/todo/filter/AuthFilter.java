@@ -4,6 +4,10 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Class AuthFilter - Фильтр аутентификации. Решение задач уровня Middle.
  * Категория : 3.3. HibernateТема : 3.3.2. Конфигурирование.
@@ -14,6 +18,14 @@ import java.io.IOException;
  */
 @Component
 public class AuthFilter implements Filter {
+    private final Set<String> pages = new HashSet<>(Arrays.asList("loginPage",
+                                                                  "login",
+                                                                  "formAddUser",
+                                                                  "registration",
+                                                                  "ok",
+                                                                  "items",
+                                                                  "notFound"));
+
     @Override
     public void doFilter(
             ServletRequest request,
@@ -22,9 +34,8 @@ public class AuthFilter implements Filter {
         HttpServletRequest reg = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
         String uri = reg.getRequestURI();
-        if (uri.endsWith("loginPage") || uri.endsWith("login")
-                || uri.endsWith("formAddUser") || uri.endsWith("registration")
-                || uri.endsWith("ok") || uri.endsWith("items")) {
+
+        if (pages.stream().anyMatch(page -> uri.endsWith(page))) {
             chain.doFilter(reg, res);
             return;
         }

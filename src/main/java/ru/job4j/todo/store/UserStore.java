@@ -19,35 +19,15 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 @AllArgsConstructor
-public class UserStore {
+public class UserStore implements Store {
     private final SessionFactory sf;
-    /**
-     * Method tx. Применение шаблона проектирования wrapper.
-     * @param command
-     * @param <T>
-     * @return T
-     */
-    private <T> T tx(final Function<Session, T> command) {
-        final Session session = sf.openSession();
-        final Transaction tx = session.beginTransaction();
-        try {
-            T rsl = command.apply(session);
-            tx.commit();
-            return rsl;
-        } catch (final Exception e) {
-            session.getTransaction().rollback();
-            throw e;
-        } finally {
-            session.close();
-        }
-    }
 
     public Optional<User> findUserByEmailAndPassword(String name, String password) {
         return this.tx(
                 session -> session.createQuery("from ru.job4j.todo.model.User where user_name = :fname and password = :fpassword")
                         .setParameter("fname", name)
                         .setParameter("fpassword", password)
-                        .setMaxResults(1).uniqueResultOptional()
+                        .setMaxResults(1).uniqueResultOptional(), sf
         );
     }
 
@@ -56,7 +36,7 @@ public class UserStore {
                 session -> {
                     session.save(user);
                     return user;
-                }
+                }, sf
         );
     }
 }

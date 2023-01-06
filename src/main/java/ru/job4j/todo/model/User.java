@@ -23,7 +23,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private int id;
-    @Column(name = "user_name")
+    @Column(name = "user_name", unique = true)
     private String name;
     private String password;
 }

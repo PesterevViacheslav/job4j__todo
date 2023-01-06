@@ -28,7 +28,7 @@ public class UserController {
     @GetMapping("/formAddUser")
     public String addUser(Model model, @RequestParam(name = "err", required = false) Boolean err) {
         model.addAttribute("err", err != null);
-        return "addUser";
+        return "user/addUser";
     }
 
     @PostMapping("/registration")
@@ -42,13 +42,18 @@ public class UserController {
 
     @GetMapping("/ok")
     public String ok() {
-        return "ok";
+        return "shared/ok";
+    }
+
+    @GetMapping("/notFound")
+    public String notFound() {
+        return "shared/notFound";
     }
 
     @GetMapping("/loginPage")
     public String loginPage(Model model, @RequestParam(name = "err", required = false) Boolean err) {
         model.addAttribute("err", err != null);
-        return "login";
+        return "shared/login";
     }
 
     @PostMapping("/login")
