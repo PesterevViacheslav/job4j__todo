@@ -9,6 +9,8 @@ import ru.job4j.todo.util.UserUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Optional;
+
 /**
  * Class ItemController - Контроллер заданий. Решение задач уровня Middle.
  * Категория : 3.3. HibernateТема : 3.3.2. Конфигурирование.
@@ -48,36 +50,24 @@ public class ItemController {
 
     @GetMapping("/formDesc/{itemId}")
     public String descItem(Model model, HttpSession session, @PathVariable("itemId") int id) {
-        User user = UserUtil.getUser(model, session);
-        Item item = itemService.findById(id);
-        model.addAttribute("item", item);
-        if (user == null || item == null) {
-            return "redirect:/notFound";
-        } else {
-            return "item/descItem";
-        }
+        UserUtil.getUser(model, session);
+        Optional<Item> item = itemService.findById(id);
+        model.addAttribute("item", item.get());
+        return item.isEmpty() ? "redirect:/notFound" : "item/descItem";
     }
 
     @GetMapping("/formUpdate/{itemId}")
     public String formUpdate(HttpServletRequest req, Model model, HttpSession session, @PathVariable("itemId") int id) {
-        User user = UserUtil.getUser(model, session);
-        Item item = itemService.findById(id);
-        model.addAttribute("item", item);
-        req.setAttribute("item_id", item.getId());
-        if (user == null || item == null) {
-            return "redirect:/notFound";
-        } else {
-            return "item/updateItem";
-        }
+        UserUtil.getUser(model, session);
+        Optional<Item> item = itemService.findById(id);
+        model.addAttribute("item", item.get());
+        req.setAttribute("item_id", item.get().getId());
+        return item.isEmpty() ? "redirect:/notFound" : "item/updateItem";
     }
     @PostMapping("/updateItem")
     public String updateItem(HttpServletRequest req, @ModelAttribute Item item) {
-        if (item == null) {
-            return "redirect:/notFound";
-        } else {
-            itemService.update(item);
-            return "redirect:/items";
-        }
+        itemService.update(item);
+        return item == null ? "redirect:/shared/notFound" : "redirect:/items";
     }
 
     @GetMapping("/formAdd")
@@ -93,21 +83,13 @@ public class ItemController {
 
     @GetMapping("/formDelete/{itemId}")
     public String deleteItem(@PathVariable("itemId") int id) {
-        if (id == 0) {
-            return "redirect:/shared/notFound";
-        } else {
-            itemService.delete(id);
-            return "redirect:/items";
-        }
+        itemService.delete(id);
+        return id == 0 ? "redirect:/shared/notFound" : "redirect:/items";
     }
 
     @GetMapping("/formDone/{itemId}")
     public String doneItem(@PathVariable("itemId") int id) {
-        if (id == 0) {
-            return "redirect:/shared/notFound";
-        } else {
-            itemService.setDone(id);
-            return "redirect:/items";
-        }
+        itemService.setDone(id);
+        return id == 0 ? "redirect:/shared/notFound" : "redirect:/items";
     }
 }

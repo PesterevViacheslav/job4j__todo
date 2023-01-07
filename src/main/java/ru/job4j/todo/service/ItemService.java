@@ -5,6 +5,8 @@ import ru.job4j.todo.model.User;
 import ru.job4j.todo.store.ItemStore;
 
 import java.util.List;
+import java.util.Optional;
+
 /**
  * Class ItemService - Сервис обработки действий с заданиями. Решение задач уровня Middle.
  * Категория : 3.3. HibernateТема : 3.3.2. Конфигурирование.
@@ -22,7 +24,7 @@ public class ItemService {
     public void add(Item item) {
         itemStore.add(item);
     }
-    public Item findById(int id) {
+    public Optional<Item> findById(int id) {
         return itemStore.findById(id);
     }
     public List findAllItems(int state, User user) {

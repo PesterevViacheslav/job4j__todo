@@ -6,6 +6,7 @@ import ru.job4j.todo.model.Item;
 import ru.job4j.todo.model.User;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.function.Function;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -37,10 +38,10 @@ public class ItemStore implements Store {
      * @return Дело
      */
 
-    public Item findById(int id) {
-        return this.tx(
+    public Optional<Item> findById(int id) {
+        return Optional.of(this.tx(
                 session -> session.get(Item.class, id), sf
-        );
+        ));
     }
      /**
      * Method setDone. Перевод в состояние - Выполнена.
