@@ -66,8 +66,7 @@ public class ItemController {
     }
     @PostMapping("/updateItem")
     public String updateItem(HttpServletRequest req, @ModelAttribute Item item) {
-        itemService.update(item);
-        return item == null ? "redirect:/shared/notFound" : "redirect:/items";
+        return itemService.update(item) ? "redirect:/items" : "redirect:/shared/notFound";
     }
 
     @GetMapping("/formAdd")
@@ -83,13 +82,11 @@ public class ItemController {
 
     @GetMapping("/formDelete/{itemId}")
     public String deleteItem(@PathVariable("itemId") int id) {
-        itemService.delete(id);
-        return id == 0 ? "redirect:/shared/notFound" : "redirect:/items";
+        return itemService.delete(id) ? "redirect:/items" : "redirect:/shared/notFound";
     }
 
     @GetMapping("/formDone/{itemId}")
     public String doneItem(@PathVariable("itemId") int id) {
-        itemService.setDone(id);
-        return id == 0 ? "redirect:/shared/notFound" : "redirect:/items";
+        return itemService.setDone(id) ? "redirect:/items" : "redirect:/shared/notFound";
     }
 }

@@ -33,11 +33,7 @@ public class UserController {
 
     @PostMapping("/registration")
     public String registration(@ModelAttribute User user) {
-        User usr = userService.createUser(user);
-        if (usr == null) {
-            return "redirect:/formAddUser?err=true";
-        }
-        return "redirect:/ok";
+        return userService.createUser(user) == null ? "redirect:/formAddUser?err=true" : "redirect:/ok";
     }
 
     @GetMapping("/ok")

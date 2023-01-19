@@ -30,13 +30,30 @@ public class ItemService {
     public List findAllItems(int state, User user) {
         return itemStore.findAllItems(state, user);
     }
-    public void setDone(int id) {
-        itemStore.setDone(id);
+    public boolean setDone(int id) {
+        boolean res = true;
+        if (itemStore.findById(id).isEmpty()) {
+            res = false;
+        } else {
+            itemStore.setDone(id);
+        }
+        return res;
     }
-    public void update(Item item) {
-        itemStore.update(item);
+    public boolean update(Item item) {
+        boolean res = true;
+        if (itemStore.findById(item.getId()).isEmpty()) {
+            res = false;
+        } else {
+            itemStore.update(item);
+        }
+        return res;
     }
-    public void delete(int id) {
+    public boolean delete(int id) {
+        boolean res = false;
         itemStore.delete(id);
+        if (itemStore.findById(id).isEmpty()) {
+            res = true;
+        }
+        return res;
     }
 }
