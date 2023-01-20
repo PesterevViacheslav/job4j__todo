@@ -31,29 +31,18 @@ public class ItemService {
         return itemStore.findAllItems(state, user);
     }
     public boolean setDone(int id) {
-        boolean res = true;
-        if (itemStore.findById(id).isEmpty()) {
-            res = false;
-        } else {
-            itemStore.setDone(id);
-        }
-        return res;
+        Optional<Item> res = itemStore.findById(id);
+        res.ifPresent(itm -> itemStore.setDone(id));
+        return res.isPresent();
     }
     public boolean update(Item item) {
-        boolean res = true;
-        if (itemStore.findById(item.getId()).isEmpty()) {
-            res = false;
-        } else {
-            itemStore.update(item);
-        }
-        return res;
+        Optional<Item> res = itemStore.findById(item.getId());
+        res.ifPresent(itm -> itemStore.update(item));
+        return res.isPresent();
     }
     public boolean delete(int id) {
-        boolean res = false;
-        itemStore.delete(id);
-        if (itemStore.findById(id).isEmpty()) {
-            res = true;
-        }
-        return res;
+        Optional<Item> res = itemStore.findById(id);
+        res.ifPresent(itm -> itemStore.delete(id));
+        return res.isPresent();
     }
 }
