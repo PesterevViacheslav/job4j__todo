@@ -67,6 +67,10 @@
                         <td th:if="${item.done}">Выполнено</td>
                         <td th:if="${!item.done}">Не выполнено</td>
                     </tr>
+                    <tr>
+                        <td>Приоритет</td>
+                        <td th:text="${item.priority.name}"/>
+                    </tr>
                     </thead>
                 </table>
             </div>

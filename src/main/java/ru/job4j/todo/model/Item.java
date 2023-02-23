@@ -30,4 +30,7 @@ public class Item {
     @JoinColumn(name = "user_id")
     @EqualsAndHashCode.Include
     private User user;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "priority_id")
+    private Priority priority;
 }

@@ -1,12 +1,13 @@
 package ru.job4j.todo.controller;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.job4j.todo.model.Item;
 import ru.job4j.todo.model.User;
 import ru.job4j.todo.service.ItemService;
+import ru.job4j.todo.service.PriorityService;
 import ru.job4j.todo.util.UserUtil;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Optional;
@@ -20,17 +21,15 @@ import java.util.Optional;
  * @version 1
  */
 @Controller
+@AllArgsConstructor
 public class ItemController {
     private final ItemService itemService;
-
-    public ItemController(ItemService itemService) {
-        this.itemService = itemService;
-    }
-
+    private final PriorityService priorityService;
     @GetMapping("/items")
     public String items(Model model, HttpSession session) {
         User user = UserUtil.getUser(model, session);
         model.addAttribute("items", itemService.findAllItems(1, user));
+        model.addAttribute("priorities", priorityService.findAllPriorities());
         return "item/items";
     }
 
@@ -38,6 +37,7 @@ public class ItemController {
     public String allNew(Model model, HttpSession session) {
         User user = UserUtil.getUser(model, session);
         model.addAttribute("items", itemService.findAllItems(3, user));
+        model.addAttribute("priorities", priorityService.findAllPriorities());
         return "item/items";
     }
 
@@ -45,6 +45,7 @@ public class ItemController {
     public String allDone(Model model, HttpSession session) {
         User user = UserUtil.getUser(model, session);
         model.addAttribute("items", itemService.findAllItems(2, user));
+        model.addAttribute("priorities", priorityService.findAllPriorities());
         return "item/items";
     }
 
@@ -53,6 +54,7 @@ public class ItemController {
         UserUtil.getUser(model, session);
         Optional<Item> item = itemService.findById(id);
         model.addAttribute("item", item.get());
+        model.addAttribute("priorities", priorityService.findAllPriorities());
         return item.isEmpty() ? "redirect:/notFound" : "item/descItem";
     }
 
@@ -61,6 +63,7 @@ public class ItemController {
         UserUtil.getUser(model, session);
         Optional<Item> item = itemService.findById(id);
         model.addAttribute("item", item.get());
+        model.addAttribute("priorities", priorityService.findAllPriorities());
         req.setAttribute("item_id", item.get().getId());
         return item.isEmpty() ? "redirect:/notFound" : "item/updateItem";
     }
@@ -72,6 +75,7 @@ public class ItemController {
     @GetMapping("/formAdd")
     public String formAdd(@ModelAttribute Item item, Model model, HttpSession session) {
         UserUtil.getUser(model, session);
+        model.addAttribute("priorities", priorityService.findAllPriorities());
         return "item/addItem";
     }
     @PostMapping("/createItem")

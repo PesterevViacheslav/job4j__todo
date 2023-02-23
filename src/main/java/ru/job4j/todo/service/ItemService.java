@@ -3,10 +3,8 @@ import org.springframework.stereotype.Service;
 import ru.job4j.todo.model.Item;
 import ru.job4j.todo.model.User;
 import ru.job4j.todo.store.ItemStore;
-
 import java.util.List;
 import java.util.Optional;
-
 /**
  * Class ItemService - Сервис обработки действий с заданиями. Решение задач уровня Middle.
  * Категория : 3.3. HibernateТема : 3.3.2. Конфигурирование.

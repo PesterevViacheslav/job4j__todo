@@ -54,6 +54,13 @@
                             <input type="text" class="form-control" size="30" name="description" id="description">
                         </label>
                     </div>
+                    <div class="mb-3">
+                        <label for="priority" class="form-label"><b>Приоритет</b></label>
+                        <select class="form-control" id="priority" name="priority.id">
+                            <option th:each="priority : ${priorities}" th:value="${priority.id}"
+                                    th:text="${priority.name}"></option>
+                        </select>
+                    </div>
                     <button type="submit" class="btn btn-primary">Сохранить</button>
                 </form>
             </div>

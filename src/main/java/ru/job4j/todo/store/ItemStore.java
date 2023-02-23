@@ -1,13 +1,10 @@
 package ru.job4j.todo.store;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import ru.job4j.todo.model.Item;
 import ru.job4j.todo.model.User;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Optional;
-import java.util.function.Function;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 /**
@@ -39,9 +36,14 @@ public class ItemStore implements Store {
      */
 
     public Optional<Item> findById(int id) {
-        return Optional.of(this.tx(
-                session -> session.get(Item.class, id), sf
-        ));
+        return this.tx(
+                //session -> session.get(Item.class, id), sf
+                session -> {
+                    return session.createQuery(" from ru.job4j.todo.model.Item i JOIN FETCH i.priority"
+                                   + " where i.id = :item_id")
+                           .setParameter("item_id", id).uniqueResultOptional();
+                }, sf
+        );
     }
      /**
      * Method setDone. Перевод в состояние - Выполнена.
@@ -72,10 +74,10 @@ public class ItemStore implements Store {
     public ArrayList<Item> findAllItems(final int state, User user) {
         return this.tx(
                 session -> {
-                    return (ArrayList<Item>) session.createQuery(" from ru.job4j.todo.model.Item"
+                    return (ArrayList<Item>) session.createQuery(" from ru.job4j.todo.model.Item i JOIN FETCH i.priority"
                                     + " where user_id = :user_id"
                                     + "   and (:state = 1 or :state = 2 and done = true or :state = 3 and done = false)"
-                                    + " order by 1")
+                                    + " order by priority_id")
                             .setParameter("user_id", user.getId()).setParameter("state", state).list();
                 }, sf
         );

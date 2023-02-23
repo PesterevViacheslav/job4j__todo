@@ -1,11 +1,8 @@
 package ru.job4j.todo.store;
-
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-
 import java.util.function.Function;
-
 public interface Store {
     /**
      * Method tx. Применение шаблона проектирования wrapper.

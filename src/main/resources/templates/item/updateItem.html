@@ -51,6 +51,7 @@
                                 <th scope="col"><small>Дата создания</small></th>
                                 <th scope="col"><small>Выполнено</small></th>
                                 <th scope="col"><small>Автор задания</small></th>
+                                <th scope="col"><small>Приоритет</small></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -58,7 +59,7 @@
                                 <td th:text="${#dates.format(item.created, 'dd-MM-yyyy HH:mm:ss')}"/>
                                 <td th:if="${item.done}">Выполнено</td>
                                 <td th:if="${!item.done}">Не выполнено</td>
-                                <td th:text="${item.user.name}"/>
+                                <td th:text="${item.priority.name}"/>
                             </tbody>
                         </table>
                         </table>
@@ -77,6 +78,13 @@
                             <input type="text" class="form-control" size="30" name="description" id="description" th:field="*{description}">
                         </label>
                     </div>
+                     <div class="col-sm-3 mb-3">
+                         <label for="priority" class="col-form-label">Приоритет</label>
+                         <select class="form-control" id="priority" name="priority.id" th:field="*{priority.id}">
+                             <option th:each="priority : ${priorities}" th:value="${priority.id}"
+                                     th:text="${priority.name}"></option>
+                         </select>
+                     </div>
                     <br>
                     <button type="submit" class="btn btn-primary">Сохранить</button>
                 </form>
