@@ -37,7 +37,6 @@ public class ItemStore implements Store {
 
     public Optional<Item> findById(int id) {
         return this.tx(
-                //session -> session.get(Item.class, id), sf
                 session -> {
                     return session.createQuery(" from ru.job4j.todo.model.Item i JOIN FETCH i.priority"
                                    + " where i.id = :item_id")
