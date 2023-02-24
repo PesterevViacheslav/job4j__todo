@@ -4,6 +4,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 import ru.job4j.todo.model.Priority;
 import java.util.ArrayList;
+import java.util.List;
 /**
  * Class PriorityStore - Хранилище приоритетов в БД postgres.
  * Решение задач уровня Middle. Части 3.3. Hibernate.
@@ -21,7 +22,7 @@ public class PriorityStore implements Store {
      * Method findAllPriorities. Получение списка приоритетов.
      * @return Приоритеты.
      */
-    public ArrayList<Priority> findAllPriorities() {
+    public List<Priority> findAllPriorities() {
         return this.tx(
                 session -> {
                     return (ArrayList<Priority>) session.createQuery(" from ru.job4j.todo.model.Priority"

@@ -4,6 +4,7 @@ import ru.job4j.todo.model.Item;
 import ru.job4j.todo.model.User;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -70,7 +71,7 @@ public class ItemStore implements Store {
      * Method findAllItems. Получение списка текущих дел.
      * @return Дела.
      */
-    public ArrayList<Item> findAllItems(final int state, User user) {
+    public List<Item> findAllItems(final int state, User user) {
         return this.tx(
                 session -> {
                     return (ArrayList<Item>) session.createQuery(" from ru.job4j.todo.model.Item i JOIN FETCH i.priority"
