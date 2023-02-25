@@ -3,7 +3,6 @@ import org.hibernate.SessionFactory;
 import ru.job4j.todo.model.Item;
 import ru.job4j.todo.model.User;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
@@ -39,7 +38,7 @@ public class ItemStore implements Store {
     public Optional<Item> findById(int id) {
         return this.tx(
                 session -> {
-                    return session.createQuery(" from ru.job4j.todo.model.Item i JOIN FETCH i.priority"
+                    return session.createQuery(" from Item i JOIN FETCH i.priority"
                                    + " where i.id = :item_id")
                            .setParameter("item_id", id).uniqueResultOptional();
                 }, sf
@@ -74,7 +73,7 @@ public class ItemStore implements Store {
     public List<Item> findAllItems(final int state, User user) {
         return this.tx(
                 session -> {
-                    return (ArrayList<Item>) session.createQuery(" from ru.job4j.todo.model.Item i JOIN FETCH i.priority"
+                    return session.createQuery(" from Item i JOIN FETCH i.priority"
                                     + " where user_id = :user_id"
                                     + "   and (:state = 1 or :state = 2 and done = true or :state = 3 and done = false)"
                                     + " order by priority_id")

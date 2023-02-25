@@ -3,7 +3,6 @@ import lombok.AllArgsConstructor;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 import ru.job4j.todo.model.Priority;
-import java.util.ArrayList;
 import java.util.List;
 /**
  * Class PriorityStore - Хранилище приоритетов в БД postgres.
@@ -25,7 +24,7 @@ public class PriorityStore implements Store {
     public List<Priority> findAllPriorities() {
         return this.tx(
                 session -> {
-                    return (ArrayList<Priority>) session.createQuery(" from ru.job4j.todo.model.Priority"
+                    return session.createQuery(" from Priority"
                                     + " order by 1")
                             .list();
                 }, sf

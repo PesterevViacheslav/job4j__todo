@@ -24,7 +24,7 @@ public class UserStore implements Store {
 
     public Optional<User> findUserByEmailAndPassword(String name, String password) {
         return this.tx(
-                session -> session.createQuery("from ru.job4j.todo.model.User where user_name = :fname and password = :fpassword")
+                session -> session.createQuery("from User where user_name = :fname and password = :fpassword")
                         .setParameter("fname", name)
                         .setParameter("fpassword", password)
                         .setMaxResults(1).uniqueResultOptional(), sf
