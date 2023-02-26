@@ -28,7 +28,7 @@ public class ItemController {
     @GetMapping("/items")
     public String items(Model model, HttpSession session) {
         User user = UserUtil.getUser(model, session);
-        model.addAttribute("items", itemService.findAllItems(1, user));
+        model.addAttribute("items", itemService.findAllItems(user));
         model.addAttribute("priorities", priorityService.findAllPriorities());
         return "item/items";
     }
@@ -36,7 +36,7 @@ public class ItemController {
     @GetMapping("/formNew")
     public String allNew(Model model, HttpSession session) {
         User user = UserUtil.getUser(model, session);
-        model.addAttribute("items", itemService.findAllItems(3, user));
+        model.addAttribute("items", itemService.findNewItems(user));
         model.addAttribute("priorities", priorityService.findAllPriorities());
         return "item/items";
     }
@@ -44,7 +44,7 @@ public class ItemController {
     @GetMapping("/formDone")
     public String allDone(Model model, HttpSession session) {
         User user = UserUtil.getUser(model, session);
-        model.addAttribute("items", itemService.findAllItems(2, user));
+        model.addAttribute("items", itemService.findDoneItems(user));
         model.addAttribute("priorities", priorityService.findAllPriorities());
         return "item/items";
     }

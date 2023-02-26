@@ -67,17 +67,46 @@ public class ItemStore implements Store {
         );
     }
      /**
-     * Method findAllItems. Получение списка текущих дел.
+     * Method findAllItems. Получение списка всех дел.
      * @return Дела.
      */
-    public List<Item> findAllItems(final int state, User user) {
+    public List<Item> findAllItems(User user) {
         return this.tx(
                 session -> {
                     return session.createQuery(" from Item i JOIN FETCH i.priority"
                                     + " where user_id = :user_id"
-                                    + "   and (:state = 1 or :state = 2 and done = true or :state = 3 and done = false)"
                                     + " order by priority_id")
-                            .setParameter("user_id", user.getId()).setParameter("state", state).list();
+                            .setParameter("user_id", user.getId()).list();
+                }, sf
+        );
+    }
+    /**
+     * Method findAllItems. Получение списка выполненных дел.
+     * @return Дела.
+     */
+    public List<Item> findDoneItems(User user) {
+        return this.tx(
+                session -> {
+                    return session.createQuery(" from Item i JOIN FETCH i.priority"
+                                    + " where user_id = :user_id"
+                                    + "   and done = true"
+                                    + " order by priority_id")
+                            .setParameter("user_id", user.getId()).list();
+                }, sf
+        );
+    }
+    /**
+     * Method findAllItems. Получение списка текущих дел.
+     * @return Дела.
+     */
+    public List<Item> findNewItems(User user) {
+        return this.tx(
+                session -> {
+                    return session.createQuery(" from Item i JOIN FETCH i.priority"
+                                    + " where user_id = :user_id"
+                                    + "   and done = false"
+                                    + " order by priority_id")
+                            .setParameter("user_id", user.getId()).list();
                 }, sf
         );
     }

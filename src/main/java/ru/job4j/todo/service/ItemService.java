@@ -25,8 +25,14 @@ public class ItemService {
     public Optional<Item> findById(int id) {
         return itemStore.findById(id);
     }
-    public List findAllItems(int state, User user) {
-        return itemStore.findAllItems(state, user);
+    public List findAllItems(User user) {
+        return itemStore.findAllItems(user);
+    }
+    public List findDoneItems(User user) {
+        return itemStore.findDoneItems(user);
+    }
+    public List findNewItems(User user) {
+        return itemStore.findNewItems(user);
     }
     public boolean setDone(int id) {
         Optional<Item> res = itemStore.findById(id);
