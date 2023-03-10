@@ -2,6 +2,8 @@ package ru.job4j.todo.model;
 import lombok.*;
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
@@ -33,4 +35,14 @@ public class Item {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "priority_id")
     private Priority priority;
+    @ManyToMany
+    @JoinTable(
+            name = "item_category",
+            joinColumns = { @JoinColumn(name = "item_id") },
+            inverseJoinColumns = { @JoinColumn(name = "category_id") }
+    )
+    private List<Category> categories = new ArrayList<>();
+    public void addCategory(Category category) {
+        this.categories.add(category);
+    }
 }

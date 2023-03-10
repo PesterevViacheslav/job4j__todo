@@ -71,6 +71,10 @@
                         <td>Приоритет</td>
                         <td th:text="${item.priority.name}"/>
                     </tr>
+                    <tr>
+                        <td>Категория</td>
+                        <td th:each="category: ${item.getCategories()}" th:text="${category.name}"></td>
+                    </tr>
                     </thead>
                 </table>
             </div>

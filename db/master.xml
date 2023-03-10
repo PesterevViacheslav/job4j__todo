@@ -11,4 +11,6 @@
     <include file="scripts/004.ddl_create_column_item_priority.sql" relativeToChangelogFile="true"/>
     <include file="scripts/005_dml_insert_prior_set_item.sql" relativeToChangelogFile="true"/>
     <include file="scripts/006_ddl_item_prior_set_not_null.sql" relativeToChangelogFile="true"/>
+    <include file="scripts/007_ddl_create_table_category.sql" relativeToChangelogFile="true"/>
+    <include file="scripts/008_ddl_create_table_item_category.sql" relativeToChangelogFile="true"/>
 </databaseChangeLog>

@@ -56,6 +56,7 @@
                 <th scope="col">Выполнено</th>
                 <th scope="col">Автор задания</th>
                 <th scope="col">Приоритет</th>
+                <th scope="col">Категория</th>
             </tr>
             </thead>
             <tbody>
@@ -77,6 +78,9 @@
                 </td>
                 <td th:text="${item.user.name}"/>
                 <td th:text="${item.priority.name}"/>
+                <td>
+                    <span th:each="category: ${item.getCategories()}" th:text="${category.name} + ' ' "></span>
+                </td>
             </tr>
             </tbody>
         </table>

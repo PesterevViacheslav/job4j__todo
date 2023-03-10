@@ -34,11 +34,10 @@ public class ItemStore implements Store {
      * @param id ID дела.
      * @return Дело
      */
-
     public Optional<Item> findById(int id) {
         return this.tx(
                 session -> {
-                    return session.createQuery(" from Item i JOIN FETCH i.priority"
+                    return session.createQuery(" from Item i JOIN FETCH i.priority LEFT JOIN FETCH i.categories"
                                    + " where i.id = :item_id")
                            .setParameter("item_id", id).uniqueResultOptional();
                 }, sf
@@ -48,7 +47,6 @@ public class ItemStore implements Store {
      * Method setDone. Перевод в состояние - Выполнена.
      * @param id ID дела.
      */
-
     public void setDone(int id) {
         tx(session -> session.createQuery("update Item set done = true where id = :fId")
                 .setParameter("fId", id).executeUpdate(), sf
@@ -73,7 +71,7 @@ public class ItemStore implements Store {
     public List<Item> findAllItems(User user) {
         return this.tx(
                 session -> {
-                    return session.createQuery(" from Item i JOIN FETCH i.priority"
+                    return session.createQuery("SELECT DISTINCT i FROM Item i JOIN FETCH i.priority LEFT JOIN FETCH i.categories"
                                     + " where user_id = :user_id"
                                     + " order by priority_id")
                             .setParameter("user_id", user.getId()).list();
@@ -87,7 +85,7 @@ public class ItemStore implements Store {
     public List<Item> findDoneItems(User user) {
         return this.tx(
                 session -> {
-                    return session.createQuery(" from Item i JOIN FETCH i.priority"
+                    return session.createQuery("SELECT DISTINCT i FROM Item i JOIN FETCH i.priority LEFT JOIN FETCH i.categories"
                                     + " where user_id = :user_id"
                                     + "   and done = true"
                                     + " order by priority_id")
@@ -102,7 +100,7 @@ public class ItemStore implements Store {
     public List<Item> findNewItems(User user) {
         return this.tx(
                 session -> {
-                    return session.createQuery(" from Item i JOIN FETCH i.priority"
+                    return session.createQuery("SELECT DISTINCT i FROM Item i JOIN FETCH i.priority LEFT JOIN FETCH i.categories"
                                     + " where user_id = :user_id"
                                     + "   and done = false"
                                     + " order by priority_id")
