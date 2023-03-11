@@ -21,7 +21,7 @@ public class CategoryService {
     public List findAllCategories() {
         return categoryStore.findAllCategories();
     }
-    public Optional<Category> findById(int id) {
-        return categoryStore.findById(id);
+    public List<Category> findByIdList(List idList) {
+        return categoryStore.findByIdList(idList);
     }
 }

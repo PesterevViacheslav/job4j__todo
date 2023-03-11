@@ -78,7 +78,7 @@ public class ItemController {
     @PostMapping("/updateItem")
     public String updateItem(HttpServletRequest req, @ModelAttribute Item item,
                              @RequestParam("categoryId") List<Integer> categoryIdList) {
-        categoryIdList.forEach(id -> item.addCategory(categoryService.findById(id).get()));
+        categoryService.findByIdList(categoryIdList).forEach(id -> item.addCategory(id));
         return itemService.update(item) ? "redirect:/items" : "redirect:/shared/notFound";
     }
 
@@ -92,7 +92,8 @@ public class ItemController {
     @PostMapping("/createItem")
     public String createItem(@ModelAttribute Item item,
                              @RequestParam("categoryId") List<Integer> categoryIdList) {
-        categoryIdList.forEach(id -> item.addCategory(categoryService.findById(id).get()));
+        categoryService.findByIdList(categoryIdList).forEach(id -> item.addCategory(id));
+        //categoryIdList.forEach(id -> item.addCategory(categoryService.findById(id).get()));
         itemService.add(item);
         return "redirect:/items";
     }

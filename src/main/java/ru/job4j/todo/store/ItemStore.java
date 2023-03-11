@@ -71,9 +71,12 @@ public class ItemStore implements Store {
     public List<Item> findAllItems(User user) {
         return this.tx(
                 session -> {
-                    return session.createQuery("SELECT DISTINCT i FROM Item i JOIN FETCH i.priority LEFT JOIN FETCH i.categories"
-                                    + " where user_id = :user_id"
-                                    + " order by priority_id")
+                    return session.createQuery(
+                           "SELECT DISTINCT i FROM Item i"
+                                    + " JOIN FETCH i.priority"
+                                    + " LEFT JOIN FETCH i.categories"
+                                    + " WHERE user_id = :user_id"
+                            )
                             .setParameter("user_id", user.getId()).list();
                 }, sf
         );
@@ -85,10 +88,13 @@ public class ItemStore implements Store {
     public List<Item> findDoneItems(User user) {
         return this.tx(
                 session -> {
-                    return session.createQuery("SELECT DISTINCT i FROM Item i JOIN FETCH i.priority LEFT JOIN FETCH i.categories"
-                                    + " where user_id = :user_id"
-                                    + "   and done = true"
-                                    + " order by priority_id")
+                    return session.createQuery(
+                            "SELECT DISTINCT i FROM Item i"
+                                    + " JOIN FETCH i.priority"
+                                    + " LEFT JOIN FETCH i.categories"
+                                    + " WHERE user_id = :user_id"
+                                    + "   AND done = true"
+                            )
                             .setParameter("user_id", user.getId()).list();
                 }, sf
         );
@@ -100,10 +106,13 @@ public class ItemStore implements Store {
     public List<Item> findNewItems(User user) {
         return this.tx(
                 session -> {
-                    return session.createQuery("SELECT DISTINCT i FROM Item i JOIN FETCH i.priority LEFT JOIN FETCH i.categories"
-                                    + " where user_id = :user_id"
-                                    + "   and done = false"
-                                    + " order by priority_id")
+                    return session.createQuery(
+                            "SELECT DISTINCT i FROM Item i"
+                                    + "  JOIN FETCH i.priority"
+                                    + "  LEFT JOIN FETCH i.categories"
+                                    + " WHERE user_id = :user_id"
+                                    + "   AND done = false"
+                            )
                             .setParameter("user_id", user.getId()).list();
                 }, sf
         );

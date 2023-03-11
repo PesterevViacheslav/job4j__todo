@@ -36,15 +36,15 @@ public class CategoryStore implements Store {
     }
     /**
      * Method findById. Поиск по ID.
-     * @param id ID категории.
+     * @param idList ID категорий.
      * @return Категория
      */
-    public Optional<Category> findById(int id) {
+    public List<Category> findByIdList(List idList) {
         return this.tx(
                 session -> {
                     return session.createQuery(" from Category i"
-                                    + " where i.id = :category_id")
-                            .setParameter("category_id", id).uniqueResultOptional();
+                                    + " where i.id IN (:category_id)")
+                            .setParameter("category_id", idList).list();
                 }, sf
         );
     }
