@@ -93,7 +93,6 @@ public class ItemController {
     public String createItem(@ModelAttribute Item item,
                              @RequestParam("categoryId") List<Integer> categoryIdList) {
         categoryService.findByIdList(categoryIdList).forEach(id -> item.addCategory(id));
-        //categoryIdList.forEach(id -> item.addCategory(categoryService.findById(id).get()));
         itemService.add(item);
         return "redirect:/items";
     }
