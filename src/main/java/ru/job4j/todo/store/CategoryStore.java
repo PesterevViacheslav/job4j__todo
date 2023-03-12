@@ -39,7 +39,7 @@ public class CategoryStore implements Store {
      * @param idList ID категорий.
      * @return Категория
      */
-    public List<Category> findByIdList(List idList) {
+    public List<Category> findByIdList(List<Integer> idList) {
         return this.tx(
                 session -> {
                     return session.createQuery(" from Category i"
