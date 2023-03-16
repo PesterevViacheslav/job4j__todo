@@ -3,7 +3,10 @@ import org.springframework.stereotype.Service;
 import ru.job4j.todo.model.User;
 import ru.job4j.todo.store.UserStore;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.TimeZone;
 
 /**
  * Class UserService - Сервис обработки действий с пользователями. Решение задач уровня Middle.
@@ -24,5 +27,16 @@ public class UserService {
     }
     public Optional<User> findUserByEmailAndPassword(String name, String pwd) {
         return userStore.findUserByEmailAndPassword(name, pwd);
+    }
+    /**
+     * Method findAllTimeZones. Получение списка таймзон.
+     * @return Таймзоны.
+     */
+    public List<String> findAllTimeZones() {
+        var zones = new ArrayList<String>();
+        for (String timeId : TimeZone.getAvailableIDs()) {
+            zones.add(TimeZone.getTimeZone(timeId).getID());
+        }
+        return zones;
     }
 }

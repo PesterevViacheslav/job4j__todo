@@ -1,7 +1,7 @@
 package ru.job4j.todo.model;
 import lombok.*;
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 @Data
@@ -26,7 +26,7 @@ public class Item {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String description;
-    private Timestamp created;
+    private ZonedDateTime created = ZonedDateTime.now();
     private boolean done;
     @ManyToOne
     @JoinColumn(name = "user_id")

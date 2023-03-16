@@ -22,8 +22,8 @@ public class ItemService {
     public void add(Item item) {
         itemStore.add(item);
     }
-    public Optional<Item> findById(int id) {
-        return itemStore.findById(id);
+    public Optional<Item> findById(int id, User user) {
+        return itemStore.findById(id, user);
     }
     public List findAllItems(User user) {
         return itemStore.findAllItems(user);
@@ -35,17 +35,17 @@ public class ItemService {
         return itemStore.findNewItems(user);
     }
     public boolean setDone(int id) {
-        Optional<Item> res = itemStore.findById(id);
+        Optional<Item> res = itemStore.findById(id, null);
         res.ifPresent(itm -> itemStore.setDone(id));
         return res.isPresent();
     }
     public boolean update(Item item) {
-        Optional<Item> res = itemStore.findById(item.getId());
+        Optional<Item> res = itemStore.findById(item.getId(), null);
         res.ifPresent(itm -> itemStore.update(item));
         return res.isPresent();
     }
     public boolean delete(int id) {
-        Optional<Item> res = itemStore.findById(id);
+        Optional<Item> res = itemStore.findById(id, null);
         res.ifPresent(itm -> itemStore.delete(id));
         return res.isPresent();
     }

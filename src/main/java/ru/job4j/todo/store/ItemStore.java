@@ -2,7 +2,7 @@ package ru.job4j.todo.store;
 import org.hibernate.SessionFactory;
 import ru.job4j.todo.model.Item;
 import ru.job4j.todo.model.User;
-import java.sql.Timestamp;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
@@ -23,7 +23,6 @@ public class ItemStore implements Store {
     public Item add(Item item) {
         return this.tx(
                 session -> {
-                    item.setCreated(new Timestamp(System.currentTimeMillis()));
                     session.save(item);
                     return item;
                 }, sf
@@ -34,14 +33,18 @@ public class ItemStore implements Store {
      * @param id ID дела.
      * @return Дело
      */
-    public Optional<Item> findById(int id) {
-        return this.tx(
+    public Optional<Item> findById(int id, User user) {
+        Optional<Item> item = this.tx(
                 session -> {
                     return session.createQuery(" from Item i JOIN FETCH i.priority LEFT JOIN FETCH i.categories"
                                    + " where i.id = :item_id")
                            .setParameter("item_id", id).uniqueResultOptional();
                 }, sf
         );
+        if (user != null) {
+            item.get().setCreated(item.get().getCreated().withZoneSameInstant(ZoneId.of(user.getTz())));
+        }
+        return item;
     }
      /**
      * Method setDone. Перевод в состояние - Выполнена.
@@ -69,7 +72,7 @@ public class ItemStore implements Store {
      * @return Дела.
      */
     public List<Item> findAllItems(User user) {
-        return this.tx(
+        List<Item> res = this.tx(
                 session -> {
                     return session.createQuery(
                            "SELECT DISTINCT i FROM Item i"
@@ -80,13 +83,19 @@ public class ItemStore implements Store {
                             .setParameter("user_id", user.getId()).list();
                 }, sf
         );
+        for (Item it : res) {
+            it.setCreated(it.getCreated().withZoneSameInstant(
+                    ZoneId.of(user.getTz())
+            ));
+        }
+        return res;
     }
     /**
      * Method findAllItems. Получение списка выполненных дел.
      * @return Дела.
      */
     public List<Item> findDoneItems(User user) {
-        return this.tx(
+        List<Item> res = this.tx(
                 session -> {
                     return session.createQuery(
                             "SELECT DISTINCT i FROM Item i"
@@ -98,13 +107,19 @@ public class ItemStore implements Store {
                             .setParameter("user_id", user.getId()).list();
                 }, sf
         );
+        for (Item it : res) {
+            it.setCreated(it.getCreated().withZoneSameInstant(
+                    ZoneId.of(user.getTz())
+            ));
+        }
+        return res;
     }
     /**
      * Method findAllItems. Получение списка текущих дел.
      * @return Дела.
      */
     public List<Item> findNewItems(User user) {
-        return this.tx(
+        List<Item> res = this.tx(
                 session -> {
                     return session.createQuery(
                             "SELECT DISTINCT i FROM Item i"
@@ -116,5 +131,11 @@ public class ItemStore implements Store {
                             .setParameter("user_id", user.getId()).list();
                 }, sf
         );
+        for (Item it : res) {
+            it.setCreated(it.getCreated().withZoneSameInstant(
+                    ZoneId.of(user.getTz())
+            ));
+        }
+        return res;
     }
 }

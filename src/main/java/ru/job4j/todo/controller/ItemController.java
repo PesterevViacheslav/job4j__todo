@@ -57,8 +57,8 @@ public class ItemController {
 
     @GetMapping("/formDesc/{itemId}")
     public String descItem(Model model, HttpSession session, @PathVariable("itemId") int id) {
-        UserUtil.getUser(model, session);
-        Optional<Item> item = itemService.findById(id);
+        User user = UserUtil.getUser(model, session);
+        Optional<Item> item = itemService.findById(id, user);
         model.addAttribute("item", item.get());
         model.addAttribute("priorities", priorityService.findAllPriorities());
         model.addAttribute("categories", categoryService.findAllCategories());
@@ -67,8 +67,8 @@ public class ItemController {
 
     @GetMapping("/formUpdate/{itemId}")
     public String formUpdate(HttpServletRequest req, Model model, HttpSession session, @PathVariable("itemId") int id) {
-        UserUtil.getUser(model, session);
-        Optional<Item> item = itemService.findById(id);
+        User user = UserUtil.getUser(model, session);
+        Optional<Item> item = itemService.findById(id, user);
         model.addAttribute("item", item.get());
         model.addAttribute("priorities", priorityService.findAllPriorities());
         model.addAttribute("categories", categoryService.findAllCategories());

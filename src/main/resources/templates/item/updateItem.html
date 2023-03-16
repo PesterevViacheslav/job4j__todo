@@ -57,7 +57,7 @@
                             </thead>
                             <tbody>
                                 <td th:text="${item.id}"/>
-                                <td th:text="${#dates.format(item.created, 'dd-MM-yyyy HH:mm:ss')}"/>
+                                <td th:text="${#temporals.format(item.created, 'dd-MM-yyyy HH:mm:ss')}"/>
                                 <td th:if="${item.done}">Выполнено</td>
                                 <td th:if="${!item.done}">Не выполнено</td>
                                 <td th:text="${item.priority.name}"/>
@@ -75,7 +75,6 @@
                  <form th:action="@{/updateItem}" method="POST" th:object="${item}">
                     <input type="hidden" name="id" th:value="*{id}"/>
                     <input type="hidden" name="done" th:value="*{done}"/>
-                    <input type="hidden" name="created" th:value="*{created}"/>
                     <input type="hidden" name="user.id" th:value="${user.id}">
                     <div class="form-group">
                         <label for="description">Задание:

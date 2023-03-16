@@ -10,7 +10,10 @@ import ru.job4j.todo.model.User;
 import ru.job4j.todo.service.UserService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 import java.util.Optional;
+import java.util.TimeZone;
+
 /**
  * Class UserController - Контроллер пользователей. Решение задач уровня Middle.
  * Категория : 3.3. HibernateТема : 3.3.2. Конфигурирование.
@@ -26,11 +29,13 @@ public class UserController {
     @GetMapping("/formAddUser")
     public String addUser(Model model, @RequestParam(name = "err", required = false) Boolean err) {
         model.addAttribute("err", err != null);
+        model.addAttribute("timezones", userService.findAllTimeZones());
         return "user/addUser";
     }
 
     @PostMapping("/registration")
-    public String registration(@ModelAttribute User user) {
+    public String registration(@ModelAttribute User user, @RequestParam("timezone") String timezone) {
+        user.setTz(timezone == null ? TimeZone.getDefault().getID() : timezone);
         return userService.createUser(user) == null ? "redirect:/formAddUser?err=true" : "redirect:/ok";
     }
 
@@ -55,6 +60,7 @@ public class UserController {
         Optional<User> usr = userService.findUserByEmailAndPassword(
                 user.getName(), user.getPassword()
         );
+
         if (usr.isEmpty()) {
             return "redirect:/loginPage?err=true";
         }

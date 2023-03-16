@@ -13,4 +13,5 @@
     <include file="scripts/006_ddl_item_prior_set_not_null.sql" relativeToChangelogFile="true"/>
     <include file="scripts/007_ddl_create_table_category.sql" relativeToChangelogFile="true"/>
     <include file="scripts/008_ddl_create_table_item_category.sql" relativeToChangelogFile="true"/>
+    <include file="scripts/009_ddl_users_add_column_tz.sql" relativeToChangelogFile="true"/>
 </databaseChangeLog>

@@ -67,7 +67,7 @@
                     <i th:text="${item.description}"></i>
                 </a>
                 </td>
-                <td th:text="${#dates.format(item.created, 'dd-MM-yyyy HH:mm:ss')}"/>
+                <td th:text="${#temporals.format(item.created, 'dd-MM-yyyy HH:mm:ss')}"/>
                 <td>
                     <span th:if="${item.done}">
                         <i class="fa fa-check-square-o"></i>

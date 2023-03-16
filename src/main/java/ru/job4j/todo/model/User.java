@@ -1,6 +1,5 @@
 package ru.job4j.todo.model;
 import lombok.*;
-
 import javax.persistence.*;
 /**
  * Class User - Пользователь. Решение задач уровня Middle.
@@ -26,4 +25,5 @@ public class User {
     @Column(name = "user_name", unique = true)
     private String name;
     private String password;
+    private String tz;
 }

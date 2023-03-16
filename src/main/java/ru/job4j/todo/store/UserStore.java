@@ -1,11 +1,7 @@
 package ru.job4j.todo.store;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import ru.job4j.todo.model.User;
-
 import java.util.Optional;
-import java.util.function.Function;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 /**
