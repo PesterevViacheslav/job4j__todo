@@ -3,6 +3,8 @@ import org.springframework.stereotype.Service;
 import ru.job4j.todo.model.Item;
 import ru.job4j.todo.model.User;
 import ru.job4j.todo.store.ItemStore;
+import ru.job4j.todo.util.ItemUtil;
+
 import java.util.List;
 import java.util.Optional;
 /**
@@ -23,16 +25,26 @@ public class ItemService {
         itemStore.add(item);
     }
     public Optional<Item> findById(int id, User user) {
-        return itemStore.findById(id, user);
+        Optional<Item> res = itemStore.findById(id, user);
+        if (user != null) {
+            res = Optional.of(ItemUtil.setTz(res.get(), user));
+        }
+        return res;
     }
-    public List findAllItems(User user) {
-        return itemStore.findAllItems(user);
+    public List<Item> findAllItems(User user) {
+        List<Item> res = itemStore.findAllItems(user);
+        res.forEach(item -> ItemUtil.setTz(item, user));
+        return res;
     }
-    public List findDoneItems(User user) {
-        return itemStore.findDoneItems(user);
+    public List<Item> findDoneItems(User user) {
+        List<Item> res = itemStore.findDoneItems(user);
+        res.forEach(item -> ItemUtil.setTz(item, user));
+        return res;
     }
-    public List findNewItems(User user) {
-        return itemStore.findNewItems(user);
+    public List<Item> findNewItems(User user) {
+        List<Item> res = itemStore.findNewItems(user);
+        res.forEach(item -> ItemUtil.setTz(item, user));
+        return res;
     }
     public boolean setDone(int id) {
         Optional<Item> res = itemStore.findById(id, null);
